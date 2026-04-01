@@ -59,6 +59,9 @@ onUnmounted(() => {
     <!-- Skip Link for Accessibility -->
     <a href="#main-content" class="skip-link">// Skip to Main</a>
 
+    <!-- Safe Area Cover for iPhone Dynamic Island -->
+    <div class="safe-area-cover" aria-hidden="true"></div>
+
     <!-- Navigation Bar -->
     <nav class="navbar">
       <div class="nav-container">
@@ -156,7 +159,7 @@ onUnmounted(() => {
     <!-- Footer -->
     <footer class="footer">
       <p>&copy; 2026 浙ICP备2026019344号-1</p>
-      <p class="version">v1.1.1</p>
+      <p class="version">v1.1.6</p>
     </footer>
   </div>
 </template>
@@ -169,6 +172,20 @@ onUnmounted(() => {
 
 #app.visible {
   opacity: 1;
+}
+
+/* ========================================
+   Safe Area Cover (iPhone Dynamic Island)
+   ======================================== */
+
+.safe-area-cover {
+  position: fixed;
+  top: -100px;
+  left: 0;
+  right: 0;
+  height: 100px;
+  z-index: calc(var(--z-modal, 1000) + 1);
+  background: #0a0a0f;
 }
 
 /* ========================================
@@ -191,8 +208,7 @@ onUnmounted(() => {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 var(--space-lg, 24px);
-  padding-top: env(safe-area-inset-top);
-  min-height: calc(70px + env(safe-area-inset-top));
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;

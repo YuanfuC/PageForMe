@@ -197,6 +197,9 @@ onUnmounted(() => {
 
 <template>
   <div class="lobster-page">
+    <!-- Safe Area Cover for iPhone Dynamic Island -->
+    <div class="safe-area-cover" aria-hidden="true"></div>
+
     <!-- Navigation -->
     <nav class="lobster-nav">
       <a href="/index.html" class="nav-logo">
@@ -280,7 +283,6 @@ onUnmounted(() => {
     <!-- Footer -->
     <footer class="footer">
       <a href="/" class="back-link">← Back to Portfolio</a>
-      <span class="separator">|</span>
       <span>{{ lobsterData.footer }}</span>
     </footer>
   </div>
@@ -293,6 +295,16 @@ onUnmounted(() => {
   flex-direction: column;
 }
 
+.safe-area-cover {
+  position: fixed;
+  top: -100px;
+  left: 0;
+  right: 0;
+  height: 100px;
+  z-index: 101;
+  background: #0a0a0f;
+}
+
 .lobster-nav {
   position: fixed;
   top: 0;
@@ -300,7 +312,7 @@ onUnmounted(() => {
   right: 0;
   z-index: 100;
   padding: 0 24px;
-  height: 70px;
+  min-height: 70px;
   display: flex;
   align-items: center;
   background: rgba(10, 10, 15, 0.9);
@@ -397,6 +409,8 @@ onUnmounted(() => {
   z-index: 10;
   text-align: center;
   padding-top: 100px;
+  padding-bottom: 80px;
+  flex: 1;
 }
 
 .lobster-link {
@@ -592,17 +606,22 @@ onUnmounted(() => {
 
 /* Footer */
 .footer {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
+  padding: 20px 16px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom, 0px));
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
+  text-align: center;
+  gap: 8px;
   color: var(--text-muted, #6b6b8a);
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 13px;
   z-index: 10;
+}
+
+.separator {
+  display: none;
 }
 
 .back-link {
