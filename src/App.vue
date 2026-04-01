@@ -43,10 +43,10 @@ onMounted(() => {
     <!-- Navigation Bar -->
     <nav class="navbar">
       <div class="nav-container">
-        <div class="nav-logo">
+        <a href="/" class="nav-logo">
           <span class="logo-icon">◆</span>
           <span class="logo-text">YUANFU</span>
-        </div>
+        </a>
 
         <div class="nav-links desktop-only">
           <a
@@ -124,7 +124,7 @@ onMounted(() => {
 
       <!-- Lobster Easter Egg -->
       <div class="lobster-easter-egg">
-        <a href="/lobster" class="lobster-link" aria-label="Visit lobster page">
+        <a href="/lobster.html" class="lobster-link" aria-label="Visit lobster page">
           <span class="lobster-text">This is my pet: MAX</span>
           <span class="lobster-icon">🦞</span>
         </a>

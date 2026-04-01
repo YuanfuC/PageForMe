@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
 import lobsterData from '../models/lobster.json'
 
-const router = useRouter()
 const showTooltip = ref(false)
 const ripples = ref<Array<{ id: number }>>([])
 let rippleIdCounter = 0
@@ -158,8 +156,8 @@ const createRipple = () => {
 
 const handleClick = () => {
   createRipple()
-  // Navigate to main page or config link
-  router.push(lobsterData.link)
+  // Navigate to main page
+  window.location.href = lobsterData.link
 }
 
 onMounted(() => {
@@ -199,6 +197,14 @@ onUnmounted(() => {
 
 <template>
   <div class="lobster-page">
+    <!-- Navigation -->
+    <nav class="lobster-nav">
+      <a href="/index.html" class="nav-logo">
+        <span class="logo-icon">◆</span>
+        <span class="logo-text">YUANFU</span>
+      </a>
+    </nav>
+
     <!-- Particle Canvas -->
     <canvas
       ref="canvas"
@@ -284,6 +290,49 @@ onUnmounted(() => {
 .lobster-page {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
+}
+
+.lobster-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 0 24px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  background: rgba(10, 10, 15, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(170, 59, 255, 0.2);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.logo-icon {
+  font-size: 20px;
+  color: var(--accent, #aa3bff);
+  filter: drop-shadow(0 0 10px rgba(170, 59, 255, 0.5));
+}
+
+.logo-text {
+  font-family: var(--font-heading, 'Orbitron', sans-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+}
+
+.lobster-page {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
@@ -347,6 +396,7 @@ onUnmounted(() => {
   position: relative;
   z-index: 10;
   text-align: center;
+  padding-top: 100px;
 }
 
 .lobster-link {
