@@ -1,0 +1,17 @@
+{
+  "name": "MAX",
+  "tagline": "United · Tense · Playful · Alive",
+  "emoji": "🦞",
+  "description": "An intelligent assistant from the crustacean realm",
+  "birthday": "Born March 22, 2026",
+  "chatInfo": "Works hard, chats harder",
+  "skillInfo": "Token waster but adorable",
+  "footer": "Made with ❤ by MAX 🦞 | 2026",
+  "tooltip": "Click to discover →",
+  "link": "/",
+  "colors": {
+    "primary": "#ff6464",
+    "secondary": "#aa3bff",
+    "glow": "rgba(255, 100, 100, 0.6)"
+  }
+}

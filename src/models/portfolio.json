@@ -1,0 +1,108 @@
+{
+  "profile": {
+    "name": "YUANFU",
+    "title": "Coder",
+    "tagline": "iOS Native • JavaScript • Multimedia",
+    "bio": "iOS native developer with a passion for JavaScript. Focused on pan-frontend development, native audio/video processing, and multimedia applications.",
+    "terminal": {
+      "prompt": "root@portfolio:~$",
+      "commands": [
+        "hi",
+        "cat /dev/random",
+        "whoami"
+      ],
+      "intro": [
+        "",
+        "Error: life is unpredictable\nWarning: stay curious\nInfo: coffee recommended",
+        "anonymous"
+      ]
+    }
+  },
+  "stats": [
+    {
+      "label": "Code Written",
+      "value": "87,600+ Hours",
+      "icon": ""
+    },
+    {
+      "label": "Apps Built",
+      "value": "10+",
+      "icon": ""
+    },
+    {
+      "label": "Platforms",
+      "value": "iOS",
+      "icon": ""
+    },
+    {
+      "label": "Coffees",
+      "value": "∞",
+      "icon": ""
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "name": "Bilibili",
+      "description": "BStar Overseas Project, Lead R&D Engineer",
+      "category": "2022 ~ Now",
+      "tech": ["BStar", "Southeast Asia", "Oversea", "练习时长2年半", "Cheers 🍻"],
+      "link": "https://www.bilibili.com/",
+      "color": "#00d4ff"
+    },
+    {
+      "id": 2,
+      "name": "DiDi",
+      "description": "Hangzhou Freight Pan-Frontend Team, Senior R&D Engineer",
+      "category": "2020 ~ 2022",
+      "tech": ["Hummer", "Dimina", "Chengdu", "Freight", "ChengXin 🍊"],
+      "link": "https://www.didiglobal.com/",
+      "color": "#ff6a00"
+    },
+    {
+      "id": 3,
+      "name": "Hover",
+      "description": "Beijing R&D Team, Senior iOS Development Engineer",
+      "category": "2015 ~ 2020",
+      "tech": ["Embedded", "Camera", "Drone 🛸"],
+      "link": "https://www.thehover.com/",
+      "color": "#ffd700"
+    }
+  ],
+  "skills": [
+    {
+      "id": 1,
+      "number": "01",
+      "title": "Media Player",
+      "description": "Ijkplayer, FFmpeg, DASH, streaming decode & playback",
+      "technologies": ["Audio", "Video", "VideoToolBox", "Ijkplayer", "FFmpeg", "DASH", "Metal", "OpenGL ES", "Skills", "MCP", "Claude Code"],
+      "icon": ""
+    },
+    {
+      "id": 2,
+      "number": "02",
+      "title": "Cross-Platform",
+      "description": "React Native, WeChat mini-program framework, performance optimization",
+      "technologies": ["React Native", "Hummer", "Dimina", "TypeScript", "WebView"],
+      "icon": ""
+    },
+    {
+      "id": 3,
+      "number": "03",
+      "title": "Hardware & Embedded",
+      "description": "Custom protocol, RTP streaming, drone control, camera & video",
+      "technologies": ["VideoToolBox", "Metal", "Remote-Control", "RTMP", "Motion", "Embedded"],
+      "icon": ""
+    }
+  ],
+  "social": {
+    "github": "https://github.com/YuanfuC",
+    "email": "dev.yuanfu@gmail.com"
+  },
+  "theme": {
+    "primary": "#aa3bff",
+    "secondary": "#00d4ff",
+    "accent": "#ffd700",
+    "pink": "#ff0080"
+  }
+}
