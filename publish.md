@@ -1,39 +1,41 @@
 # 发布指南
 
-## 构建
+## 发布
 
-```bash
-yarn build
-```
+构建产物在 `dist/` 目录：
 
-构建产物在 `dist/` 目录。
+- `dist/index.html` - 主页
+- `dist/lobster.html` - 龙虾介绍页
 
-## Nginx 配置
+## 部署
 
-Vue Router 使用 History 模式，必须配置 `try_files` 否则 `/lobster` 等路由会 404。
+两个都是静态 HTML 文件，直接用 nginx serve `dist/` 目录。
+
+### Nginx 配置
+
+yuanfu.cloud 和 www.yuanfu.cloud 都指向同一个 dist 目录：
 
 ```nginx
 server {
     listen 80;
-    server_name yourdomain.com;
+    server_name yuanfu.cloud www.yuanfu.cloud;
     root /path/to/dist;
     index index.html;
-
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-
-    location /assets/ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
 }
 ```
 
-## 路由说明
+### 文件结构
 
-- `/` - 主页
-- `/lobster` - 龙虾介绍页
-- `/secret/crustacean` - 龙虾页别名
+```
+dist/
+├── index.html      # 主页 - yuanfu.cloud/ 或 yuanfu.cloud/index.html
+├── lobster.html     # 龙虾页 - yuanfu.cloud/lobster.html
+└── assets/          # 静态资源
+```
 
-所有路由代码打包在 `dist/assets/index-*.js` 中，不会生成单独 HTML 文件。
+## 页面说明
+
+| 页面 | 访问地址 |
+|------|----------|
+| 主页 | https://yuanfu.cloud/ |
+| 龙虾页 | https://yuanfu.cloud/lobster.html |
