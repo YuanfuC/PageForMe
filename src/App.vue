@@ -156,7 +156,7 @@ onUnmounted(() => {
     <!-- Footer -->
     <footer class="footer">
       <p>&copy; 2026 浙ICP备2026019344号-1</p>
-      <p class="version">v1.0.0</p>
+      <p class="version">v1.1.0</p>
     </footer>
   </div>
 </template>
@@ -185,13 +185,17 @@ onUnmounted(() => {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(170, 59, 255, 0.2);
+  padding-top: env(safe-area-inset-top);
+  padding-top: constant(safe-area-inset-top);
 }
 
 .nav-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 var(--space-lg, 24px);
-  height: 70px;
+  padding-top: env(safe-area-inset-top);
+  padding-top: constant(safe-area-inset-top);
+  min-height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
