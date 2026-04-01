@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import Terminal from './components/Terminal.vue'
 import StatsSection from './components/StatsSection.vue'
@@ -8,13 +8,14 @@ import SkillsSection from './components/SkillsSection.vue'
 import ContactSection from './components/ContactSection.vue'
 import portfolioData from './models/portfolio.json'
 import Lobster from './views/Lobster.vue'
-import { ref, onMounted } from 'vue'
 
 const route = useRoute()
 const isLobsterPage = computed(() => route.path === '/lobster')
 
 const isVisible = ref(false)
 const isMenuOpen = ref(false)
+const isHeroVisible = ref(true)
+const subtitleRef = ref<HTMLElement | null>(null)
 
 const navLinks = [
   { name: 'Home', href: '#home' },
@@ -24,10 +25,28 @@ const navLinks = [
   { name: 'Contact', href: '#contact' }
 ]
 
+const handleScroll = () => {
+  const navbar = document.querySelector('.navbar')
+  if (subtitleRef.value && navbar) {
+    const subtitleRect = subtitleRef.value.getBoundingClientRect()
+    const navbarHeight = (navbar as HTMLElement).offsetHeight
+
+    // Show logo when Relentless Coder reaches/passes navbar
+    // Hide when above navbar (visible in hero)
+    const showLogo = subtitleRect.top <= navbarHeight
+    isHeroVisible.value = !showLogo
+  }
+}
+
 onMounted(() => {
   setTimeout(() => {
     isVisible.value = true
   }, 100)
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
 })
 </script>
 
@@ -43,7 +62,7 @@ onMounted(() => {
     <!-- Navigation Bar -->
     <nav class="navbar">
       <div class="nav-container">
-        <a href="/" class="nav-logo">
+        <a href="/" class="nav-logo" :class="{ hidden: isHeroVisible }">
           <span class="logo-icon">◆</span>
           <span class="logo-text">YUANFU</span>
         </a>
@@ -96,7 +115,7 @@ onMounted(() => {
               <span class="hero-greeting">Hi, I'm</span>
               <span class="hero-name">YUANFU</span>
             </h1>
-            <p class="hero-subtitle">{{ portfolioData.profile.title }}</p>
+            <p ref="subtitleRef" class="hero-subtitle">{{ portfolioData.profile.title }}</p>
           </div>
           <Terminal />
         </div>
@@ -137,6 +156,7 @@ onMounted(() => {
     <!-- Footer -->
     <footer class="footer">
       <p>&copy; 2026 浙ICP备2026019344号-1</p>
+      <p class="version">v1.0.0</p>
     </footer>
   </div>
 </template>
@@ -161,7 +181,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   z-index: var(--z-modal, 1000);
-  background: rgba(10, 10, 15, 0.9);
+  background: rgba(10, 10, 15, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(170, 59, 255, 0.2);
@@ -196,6 +216,11 @@ onMounted(() => {
   font-weight: 700;
   color: var(--text-h, #ffffff);
   letter-spacing: 0.05em;
+}
+
+.nav-logo.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .nav-links {
@@ -367,6 +392,11 @@ section {
 
 .footer p {
   margin: 12px 0;
+}
+
+.version {
+  opacity: 0.6;
+  font-size: 12px;
 }
 
 .slogan {

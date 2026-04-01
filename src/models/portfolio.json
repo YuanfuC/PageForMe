@@ -1,7 +1,7 @@
 {
   "profile": {
     "name": "YUANFU",
-    "title": "Coder",
+    "title": "Relentless Coder",
     "tagline": "iOS Native • JavaScript • Multimedia",
     "bio": "iOS native developer with a passion for JavaScript. Focused on pan-frontend development, native audio/video processing, and multimedia applications.",
     "terminal": {
@@ -13,7 +13,7 @@
       ],
       "intro": [
         "",
-        "Error: life is unpredictable\nWarning: stay curious\nInfo: coffee recommended",
+        "[INFO] Mode: cozy\n[WARN] Being curious\n[INFO] Coffee recommended ☕️",
         "anonymous"
       ]
     }
