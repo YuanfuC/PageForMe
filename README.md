@@ -1,5 +1,17 @@
-# Vue 3 + TypeScript + Vite
+# YUANFU Portfolio
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Design
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+Web3/Cyberpunk style with purple (#aa3bff) and cyan (#00d4ff) neon theme. Features glassmorphism UI, terminal typing animation, and responsive layout.
+
+## Skills
+
+- **Media Player** - Ijkplayer, FFmpeg, DASH, Metal, OpenGL ES
+- **Cross-Platform** - React Native, Hummer, Dimina, TypeScript, WebView
+- **Hardware & Embedded** - VideoToolBox, Metal, Remote-Control, RTMP, Motion
+
+## Tools
+
+Built with Vue 3 + TypeScript + Vite, using Vue Router and CSS Custom Properties.
+
+© 2026 YUANFU | 浙ICP备2026019344号-1
