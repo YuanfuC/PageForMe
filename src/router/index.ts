@@ -3,11 +3,6 @@ import Lobster from '../views/Lobster.vue'
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
-    name: 'home',
-    redirect: '/index.html'
-  },
-  {
     path: '/lobster',
     name: 'lobster',
     component: Lobster
