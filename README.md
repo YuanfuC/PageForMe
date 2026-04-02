@@ -8,4 +8,6 @@ A Web3/Cyberpunk styled personal portfolio featuring purple (#aa3bff) + cyan (#0
 
 ## Tech Stack
 
-Vue 3 + TypeScript + Vite, using Vue Router and CSS custom properties.
+**Frontend:** Vue 3 + TypeScript + Vite, using Vue Router and CSS custom properties.
+
+**Backend:** Go API server (port 8080) with Nginx reverse proxy.

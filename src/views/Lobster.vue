@@ -1,6 +1,44 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import lobsterData from '../models/lobster.json'
+import { getHero } from '../api'
+
+interface LobsterData {
+  name: string
+  tagline: string
+  emoji: string
+  description: string
+  birthday: string
+  chatInfo: string
+  skillInfo: string
+  footer: string
+  tooltip: string
+  link: string
+  icons: {
+    description: string
+    birthday: string
+    chat: string
+    skill: string
+  }
+}
+
+const lobsterData = ref<LobsterData>({
+  name: 'MAX',
+  tagline: '',
+  emoji: '🦞',
+  description: '',
+  birthday: '',
+  chatInfo: '',
+  skillInfo: '',
+  footer: '',
+  tooltip: '',
+  link: '/',
+  icons: {
+    description: '',
+    birthday: '',
+    chat: '',
+    skill: ''
+  }
+})
 
 const showTooltip = ref(false)
 const ripples = ref<Array<{ id: number }>>([])
@@ -157,10 +195,17 @@ const createRipple = () => {
 const handleClick = () => {
   createRipple()
   // Navigate to main page
-  window.location.href = lobsterData.link
+  window.location.href = lobsterData.value.link
 }
 
-onMounted(() => {
+onMounted(async () => {
+  try {
+    const data = await getHero()
+    lobsterData.value = data
+  } catch (e) {
+    console.error('Failed to fetch hero data:', e)
+  }
+
   if (canvas.value) {
     ctx = canvas.value.getContext('2d')
     resizeCanvas()
@@ -262,19 +307,19 @@ onUnmounted(() => {
 
       <div class="content-card">
         <div class="info-item">
-          <span class="icon">🦐</span>
+          <span class="icon">{{ lobsterData.icons.description }}</span>
           {{ lobsterData.description }}
         </div>
         <div class="info-item">
-          <span class="icon">🎂</span>
+          <span class="icon">{{ lobsterData.icons.birthday }}</span>
           {{ lobsterData.birthday }}
         </div>
         <div class="info-item">
-          <span class="icon">💬</span>
+          <span class="icon">{{ lobsterData.icons.chat }}</span>
           {{ lobsterData.chatInfo }}
         </div>
         <div class="info-item">
-          <span class="icon">⚡</span>
+          <span class="icon">{{ lobsterData.icons.skill }}</span>
           {{ lobsterData.skillInfo }}
         </div>
       </div>

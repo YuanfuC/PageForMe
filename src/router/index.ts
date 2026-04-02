@@ -1,12 +1,11 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import Home from '../views/Home.vue'
 import Lobster from '../views/Lobster.vue'
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    redirect: '/index.html'
   },
   {
     path: '/lobster',

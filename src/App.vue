@@ -6,8 +6,24 @@ import StatsSection from './components/StatsSection.vue'
 import ProjectsSection from './components/ProjectsSection.vue'
 import SkillsSection from './components/SkillsSection.vue'
 import ContactSection from './components/ContactSection.vue'
-import portfolioData from './models/portfolio.json'
+import { getProfile, getSite } from './api'
 import Lobster from './views/Lobster.vue'
+
+const profile = ref({ name: '', title: '' })
+const site = ref({ footer: '', version: '', slogan: '', pet: { label: '', name: '', emoji: '', link: '' } })
+
+onMounted(async () => {
+  try {
+    const [profileData, siteData] = await Promise.all([
+      getProfile(),
+      getSite()
+    ])
+    profile.value = profileData
+    site.value = siteData
+  } catch (e) {
+    console.error('Failed to fetch data:', e)
+  }
+})
 
 const route = useRoute()
 const isLobsterPage = computed(() => route.path === '/lobster')
@@ -67,7 +83,7 @@ onUnmounted(() => {
       <div class="nav-container">
         <a href="/" class="nav-logo" :class="{ hidden: isHeroVisible }">
           <span class="logo-icon">◆</span>
-          <span class="logo-text">YUANFU</span>
+          <span class="logo-text">{{ profile.name }}</span>
         </a>
 
         <div class="nav-links desktop-only">
@@ -116,9 +132,9 @@ onUnmounted(() => {
           <div class="hero-text">
             <h1 class="hero-title">
               <span class="hero-greeting">Hi, I'm</span>
-              <span class="hero-name">YUANFU</span>
+              <span class="hero-name">{{ profile.name }}</span>
             </h1>
-            <p ref="subtitleRef" class="hero-subtitle">{{ portfolioData.profile.title }}</p>
+            <p ref="subtitleRef" class="hero-subtitle">{{ profile.title }}</p>
           </div>
           <Terminal />
         </div>
@@ -146,20 +162,20 @@ onUnmounted(() => {
 
       <!-- Lobster Easter Egg -->
       <div class="lobster-easter-egg">
-        <a href="/lobster.html" class="lobster-link" aria-label="Visit lobster page">
-          <span class="lobster-text">This is my pet: MAX</span>
-          <span class="lobster-icon">🦞</span>
+        <a :href="site.pet.link" class="lobster-link" aria-label="Visit lobster page">
+          <span class="lobster-text">{{ site.pet.label }} {{ site.pet.name }}</span>
+          <span class="lobster-icon">{{ site.pet.emoji }}</span>
         </a>
       </div>
 
       <!-- Slogan -->
-      <p class="slogan">"Slow to be fast, retreat to advance"</p>
+      <p class="slogan">"{{ site.slogan }}"</p>
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-      <p>&copy; 2026 浙ICP备2026019344号-1</p>
-      <p class="version">v1.1.6</p>
+      <p>{{ site.footer }}</p>
+      <p class="version">{{ site.version }}</p>
     </footer>
   </div>
 </template>

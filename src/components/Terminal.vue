@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import portfolioData from '../models/portfolio.json'
+import { getProfile } from '../api'
 
 interface TerminalLine {
   text: string
@@ -8,32 +8,34 @@ interface TerminalLine {
   isCommand?: boolean
 }
 
-const prompt = portfolioData.profile.terminal.prompt
+const prompt = ref('root@portfolio:~$')
 const lines = ref<TerminalLine[]>([])
 const lineIndex = ref(0)
 const charIndex = ref(0)
 const isTyping = ref(false)
 const showCursor = ref(true)
 
-const commands = portfolioData.profile.terminal.commands
-const introLines = portfolioData.profile.terminal.intro
-
-// Combined lines: command, output, command, output, ...
-const combinedLines: { text: string; isCommand: boolean }[] = []
-commands.forEach((cmd, i) => {
-  combinedLines.push({ text: cmd, isCommand: true })
-  if (introLines[i]) {
-    combinedLines.push({ text: introLines[i], isCommand: false })
-  }
-})
+const commands = ref<string[]>([])
+const introLines = ref<string[]>([])
 
 // Typing animation
+let combinedLines: { text: string; isCommand: boolean }[] = []
+
+const buildCombinedLines = () => {
+  combinedLines = []
+  commands.value.forEach((cmd, i) => {
+    combinedLines.push({ text: cmd, isCommand: true })
+    if (introLines.value[i]) {
+      combinedLines.push({ text: introLines.value[i], isCommand: false })
+    }
+  })
+}
+
 const typeNextChar = () => {
   if (lineIndex.value < combinedLines.length) {
     const currentLineData = combinedLines[lineIndex.value]
 
     if (charIndex.value === 0) {
-      // Add new line
       lines.value.push({
         text: '',
         typed: false,
@@ -47,7 +49,6 @@ const typeNextChar = () => {
       charIndex.value++
       setTimeout(typeNextChar, 30 + Math.random() * 50)
     } else {
-      // Line complete
       const line = lines.value[lines.value.length - 1]
       line.typed = true
       charIndex.value = 0
@@ -59,11 +60,20 @@ const typeNextChar = () => {
   }
 }
 
-// Cursor blink
 let cursorInterval: ReturnType<typeof setInterval>
-onMounted(() => {
-  isTyping.value = true
-  setTimeout(typeNextChar, 500)
+
+onMounted(async () => {
+  try {
+    const data = await getProfile()
+    prompt.value = data.terminal.prompt
+    commands.value = data.terminal.commands
+    introLines.value = data.terminal.intro
+    buildCombinedLines()
+    isTyping.value = true
+    setTimeout(typeNextChar, 500)
+  } catch (e) {
+    console.error('Failed to fetch terminal data:', e)
+  }
 
   cursorInterval = setInterval(() => {
     showCursor.value = !showCursor.value
@@ -71,9 +81,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  if (cursorInterval) {
-    clearInterval(cursorInterval)
-  }
+  if (cursorInterval) clearInterval(cursorInterval)
 })
 </script>
 

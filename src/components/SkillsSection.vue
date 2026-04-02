@@ -1,9 +1,28 @@
 <script setup lang="ts">
-import portfolioData from '../models/portfolio.json'
+import { ref, onMounted } from 'vue'
+import { getSkills } from '../api'
 
-const skills = portfolioData.skills
+interface Skill {
+  id: number
+  number: string
+  title: string
+  description: string
+  technologies: string[]
+  icon: string
+}
+
+const skills = ref<Skill[]>([])
 const sectionTitle = "Skills & Expertise"
 const sectionSubtitle = "Technologies and tools I work with"
+
+onMounted(async () => {
+  try {
+    const data = await getSkills()
+    skills.value = data.skills || []
+  } catch (e) {
+    console.error('Failed to fetch skills:', e)
+  }
+})
 </script>
 
 <template>

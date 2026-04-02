@@ -1,9 +1,29 @@
 <script setup lang="ts">
-import portfolioData from '../models/portfolio.json'
+import { ref, onMounted } from 'vue'
+import { getProjects } from '../api'
 
-const projects = portfolioData.projects
+interface Project {
+  id: number
+  name: string
+  description: string
+  category: string
+  tech: string[]
+  link: string
+  color: string
+}
+
+const projects = ref<Project[]>([])
 const sectionTitle = "Work Experience"
 const sectionSubtitle = "Companies I've worked with and contributed to"
+
+onMounted(async () => {
+  try {
+    const data = await getProjects()
+    projects.value = data.projects || []
+  } catch (e) {
+    console.error('Failed to fetch projects:', e)
+  }
+})
 </script>
 
 <template>

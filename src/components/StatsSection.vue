@@ -1,30 +1,44 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import portfolioData from '../models/portfolio.json'
+import { getStats } from '../api'
 
-const stats = portfolioData.stats
-const animatedValues = ref(stats.map(() => 0))
+interface Stat {
+  label: string
+  value: string
+  icon: string
+}
 
-onMounted(() => {
-  stats.forEach((stat, index) => {
-    const targetValue = parseInt(stat.value.replace(/\D/g, '')) || 0
-    const duration = 2000
-    const steps = 60
-    const increment = targetValue / steps
-    let currentStep = 0
+const stats = ref<Stat[]>([])
+const animatedValues = ref<number[]>([])
 
-    const timer = setInterval(() => {
-      currentStep++
-      animatedValues.value[index] = Math.min(
-        Math.floor(currentStep * increment),
-        targetValue
-      )
+onMounted(async () => {
+  try {
+    const data = await getStats()
+    stats.value = data.stats || []
+    animatedValues.value = stats.value.map(() => 0)
 
-      if (currentStep >= steps) {
-        clearInterval(timer)
-      }
-    }, duration / steps)
-  })
+    stats.value.forEach((stat, index) => {
+      const targetValue = parseInt(stat.value.replace(/\D/g, '')) || 0
+      const duration = 2000
+      const steps = 60
+      const increment = targetValue / steps
+      let currentStep = 0
+
+      const timer = setInterval(() => {
+        currentStep++
+        animatedValues.value[index] = Math.min(
+          Math.floor(currentStep * increment),
+          targetValue
+        )
+
+        if (currentStep >= steps) {
+          clearInterval(timer)
+        }
+      }, duration / steps)
+    })
+  } catch (e) {
+    console.error('Failed to fetch stats:', e)
+  }
 })
 </script>
 
