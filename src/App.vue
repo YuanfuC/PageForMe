@@ -393,12 +393,26 @@ onUnmounted(() => {
   color: var(--accent-secondary, #00d4ff);
   margin-bottom: var(--space-sm, 8px);
   text-shadow: 0 0 20px var(--accent-cyan-glow, rgba(0, 212, 255, 0.5));
+  animation: thinkingPulse 3.2s ease-in-out infinite;
 }
 
 .hero-tagline {
   font-size: 16px;
   color: var(--text-muted, #6b6b8a);
   max-width: 400px;
+}
+
+@keyframes thinkingPulse {
+  0%, 100% {
+    opacity: 0.86;
+    text-shadow: 0 0 16px rgba(0, 212, 255, 0.35);
+  }
+  50% {
+    opacity: 1;
+    text-shadow:
+      0 0 22px rgba(0, 212, 255, 0.62),
+      0 0 36px rgba(170, 59, 255, 0.28);
+  }
 }
 
 /* ========================================
@@ -497,6 +511,10 @@ section {
 @media (prefers-reduced-motion: reduce) {
   #app {
     opacity: 1;
+  }
+
+  .hero-subtitle {
+    animation: none;
   }
 }
 
