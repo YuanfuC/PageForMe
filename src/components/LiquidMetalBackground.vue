@@ -13,6 +13,7 @@ let isReady = false
 
 const pointer = { x: 0.5, y: 0.5 }
 const smoothPointer = { x: 0.5, y: 0.5 }
+let interactionBoost = 0
 
 const vertexShaderSource = `
 attribute vec2 a_position;
@@ -95,14 +96,14 @@ void main() {
   vec2 p = (gl_FragCoord.xy - 0.5 * u_resolution.xy) / u_resolution.y;
   vec2 mouse = (u_mouse * u_resolution.xy - 0.5 * u_resolution.xy) / u_resolution.y;
 
-  float t = u_time * 0.16;
+  float t = u_time * 0.2;
   float dist = length(p - mouse);
   float pull = exp(-dist * 3.2) * u_intensity;
   float core = exp(-dist * 8.5) * u_intensity;
   vec2 dir = normalize(p - mouse + 0.0001);
   vec2 warped = p;
 
-  warped += dir * sin(dist * 23.0 - u_time * 1.45) * pull * 0.052;
+  warped += dir * sin(dist * 23.0 - u_time * 1.7) * pull * 0.052;
   warped -= dir * core * 0.028;
   warped += vec2(
     fbm(p * 2.6 + vec2(t, -t * 0.7)),
@@ -110,13 +111,13 @@ void main() {
   ) * 0.13;
 
   float metal = fbm(warped * 3.0 + t);
-  float veins = sin((warped.x + metal * 0.55) * 8.0 + u_time * 0.25)
-              * cos((warped.y - metal * 0.45) * 7.0 - u_time * 0.2);
+  float veins = sin((warped.x + metal * 0.55) * 8.0 + u_time * 0.32)
+              * cos((warped.y - metal * 0.45) * 7.0 - u_time * 0.26);
   float liquid = smoothstep(0.25, 1.03, metal + veins * 0.22 + pull * 0.62);
   float highlight = pow(max(0.0, 1.0 - length(warped - mouse) * 2.05), 3.0) * u_intensity;
-  float rim = smoothstep(0.26, 0.92, liquid) * (0.5 + 0.5 * sin(u_time * 0.7 + metal * 8.0));
-  float particlesA = particleField(p + warped * 0.18, mouse, u_time, 34.0, 0.12);
-  float particlesB = particleField(p * 1.08 - warped * 0.09, mouse, u_time + 7.0, 58.0, 0.105) * 0.72;
+  float rim = smoothstep(0.26, 0.92, liquid) * (0.5 + 0.5 * sin(u_time * 0.85 + metal * 8.0));
+  float particlesA = particleField(p + warped * 0.18, mouse, u_time * 1.18, 34.0, 0.12);
+  float particlesB = particleField(p * 1.08 - warped * 0.09, mouse, u_time * 1.18 + 7.0, 58.0, 0.105) * 0.72;
   float particles = clamp(particlesA + particlesB, 0.0, 1.0);
   float particleGlow = smoothstep(0.02, 0.85, particles);
 
@@ -205,14 +206,19 @@ const resizeCanvas = () => {
 const draw = (time: number) => {
   if (!canvas.value || !gl || !program || !isReady) return
 
-  smoothPointer.x += (pointer.x - smoothPointer.x) * 0.045
-  smoothPointer.y += (pointer.y - smoothPointer.y) * 0.045
+  const isMobile = window.innerWidth < 768
+  const followEase = isMobile ? 0.075 : 0.045
+  const baseIntensity = isMobile ? 0.92 : 1.0
+
+  smoothPointer.x += (pointer.x - smoothPointer.x) * followEase
+  smoothPointer.y += (pointer.y - smoothPointer.y) * followEase
+  interactionBoost += (0 - interactionBoost) * 0.035
 
   gl.useProgram(program)
   gl.uniform2f(gl.getUniformLocation(program, 'u_resolution'), canvas.value.width, canvas.value.height)
   gl.uniform2f(gl.getUniformLocation(program, 'u_mouse'), smoothPointer.x, smoothPointer.y)
   gl.uniform1f(gl.getUniformLocation(program, 'u_time'), (time - startTime) / 1000)
-  gl.uniform1f(gl.getUniformLocation(program, 'u_intensity'), window.innerWidth < 768 ? 0.68 : 1.0)
+  gl.uniform1f(gl.getUniformLocation(program, 'u_intensity'), Math.min(baseIntensity + interactionBoost, 1.55))
   gl.drawArrays(gl.TRIANGLES, 0, 6)
 }
 
@@ -234,9 +240,47 @@ const stopAnimation = () => {
   animationId = 0
 }
 
+const nudgeInteraction = (amount: number) => {
+  interactionBoost = Math.max(interactionBoost, amount)
+  if (!isReducedMotion && isVisible) {
+    startAnimation()
+  }
+}
+
+const updatePointer = (clientX: number, clientY: number, immediate = false) => {
+  pointer.x = clientX / window.innerWidth
+  pointer.y = 1 - clientY / window.innerHeight
+
+  if (immediate) {
+    smoothPointer.x += (pointer.x - smoothPointer.x) * 0.62
+    smoothPointer.y += (pointer.y - smoothPointer.y) * 0.62
+  }
+}
+
+const handlePointerDown = (event: PointerEvent) => {
+  updatePointer(event.clientX, event.clientY, true)
+  nudgeInteraction(window.innerWidth < 768 ? 0.58 : 0.32)
+}
+
 const handlePointerMove = (event: PointerEvent) => {
-  pointer.x = event.clientX / window.innerWidth
-  pointer.y = 1 - event.clientY / window.innerHeight
+  updatePointer(event.clientX, event.clientY)
+  if (event.pointerType === 'touch') {
+    nudgeInteraction(0.36)
+  }
+}
+
+const handleTouchStart = (event: TouchEvent) => {
+  const touch = event.touches[0]
+  if (!touch) return
+  updatePointer(touch.clientX, touch.clientY, true)
+  nudgeInteraction(0.58)
+}
+
+const handleTouchMove = (event: TouchEvent) => {
+  const touch = event.touches[0]
+  if (!touch) return
+  updatePointer(touch.clientX, touch.clientY)
+  nudgeInteraction(0.36)
 }
 
 const handleVisibilityChange = () => {
@@ -286,7 +330,10 @@ onMounted(() => {
   draw(startTime)
 
   window.addEventListener('resize', resizeCanvas)
+  window.addEventListener('pointerdown', handlePointerDown, { passive: true })
   window.addEventListener('pointermove', handlePointerMove)
+  window.addEventListener('touchstart', handleTouchStart, { passive: true })
+  window.addEventListener('touchmove', handleTouchMove, { passive: true })
   document.addEventListener('visibilitychange', handleVisibilityChange)
 
   if (!isReducedMotion) {
@@ -297,7 +344,10 @@ onMounted(() => {
 onUnmounted(() => {
   stopAnimation()
   window.removeEventListener('resize', resizeCanvas)
+  window.removeEventListener('pointerdown', handlePointerDown)
   window.removeEventListener('pointermove', handlePointerMove)
+  window.removeEventListener('touchstart', handleTouchStart)
+  window.removeEventListener('touchmove', handleTouchMove)
   document.removeEventListener('visibilitychange', handleVisibilityChange)
 
   if (gl && program) {
