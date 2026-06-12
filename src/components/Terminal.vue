@@ -120,11 +120,17 @@ onUnmounted(() => {
   width: 100%;
   max-width: 900px;
   height: 500px;
-  background: #0a0a0f;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(170, 59, 255, 0.14), transparent 34%),
+    linear-gradient(145deg, rgba(15, 12, 24, 0.75), rgba(5, 6, 11, 0.75) 68%);
+  backdrop-filter: blur(24px) saturate(135%);
+  -webkit-backdrop-filter: blur(24px) saturate(135%);
   border-radius: 12px;
   border: 1px solid rgba(170, 59, 255, 0.3);
   box-shadow: 0 0 60px rgba(170, 59, 255, 0.25),
               0 0 120px rgba(0, 0, 0, 0.6),
+              inset 0 1px 0 rgba(255, 255, 255, 0.06),
+              inset 0 0 70px rgba(0, 0, 0, 0.34),
               inset 0 0 60px rgba(170, 59, 255, 0.05);
   overflow: hidden;
 }
@@ -133,8 +139,14 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   padding: 14px 20px;
-  background: rgba(20, 18, 30, 0.95);
-  border-bottom: 1px solid rgba(170, 59, 255, 0.2);
+  background:
+    linear-gradient(180deg, rgba(28, 22, 42, 0.75), rgba(10, 10, 18, 0.75)),
+    rgba(10, 10, 15, 0.75);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border-bottom: 1px solid rgba(170, 59, 255, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05),
+              0 12px 34px rgba(0, 0, 0, 0.22);
 }
 
 .terminal-buttons {

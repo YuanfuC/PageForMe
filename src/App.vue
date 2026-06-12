@@ -6,6 +6,7 @@ import StatsSection from './components/StatsSection.vue'
 import ProjectsSection from './components/ProjectsSection.vue'
 import SkillsSection from './components/SkillsSection.vue'
 import ContactSection from './components/ContactSection.vue'
+import LiquidMetalBackground from './components/LiquidMetalBackground.vue'
 import { getProfile, getSite } from './api'
 import Lobster from './views/Lobster.vue'
 
@@ -72,6 +73,8 @@ onUnmounted(() => {
 
   <!-- Main Portfolio Page -->
   <div v-else id="app" :class="{ visible: isVisible }">
+    <LiquidMetalBackground />
+
     <!-- Skip Link for Accessibility -->
     <a href="#main-content" class="skip-link">// Skip to Main</a>
 
@@ -190,6 +193,12 @@ onUnmounted(() => {
   opacity: 1;
 }
 
+main,
+.footer {
+  position: relative;
+  z-index: 1;
+}
+
 /* ========================================
    Safe Area Cover (iPhone Dynamic Island)
    ======================================== */
@@ -214,13 +223,50 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   z-index: var(--z-modal, 1000);
-  background: rgba(10, 10, 15, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(170, 59, 255, 0.2);
+  background:
+    linear-gradient(180deg, rgba(10, 10, 15, 0.82), rgba(10, 10, 15, 0.54)),
+    linear-gradient(90deg, rgba(170, 59, 255, 0.12), rgba(0, 212, 255, 0.06), rgba(170, 59, 255, 0.1));
+  backdrop-filter: blur(18px) saturate(145%);
+  -webkit-backdrop-filter: blur(18px) saturate(145%);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(0, 212, 255, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 10px 34px rgba(10, 10, 15, 0.28),
+    0 0 26px rgba(170, 59, 255, 0.08);
+  overflow: hidden;
+}
+
+.navbar::before,
+.navbar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.navbar::before {
+  top: 0;
+  height: 100%;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(170, 59, 255, 0.14), transparent 32%),
+    radial-gradient(circle at 78% 0%, rgba(0, 212, 255, 0.1), transparent 30%);
+  opacity: 0.65;
+}
+
+.navbar::after {
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(170, 59, 255, 0.35), rgba(0, 212, 255, 0.9), rgba(255, 0, 128, 0.32), transparent);
+  background-size: 220% 100%;
+  box-shadow: 0 0 18px rgba(0, 212, 255, 0.35);
+  animation: navFlow 8s ease-in-out infinite;
 }
 
 .nav-container {
+  position: relative;
+  z-index: 1;
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 var(--space-lg, 24px);
@@ -320,8 +366,12 @@ onUnmounted(() => {
 }
 
 .mobile-menu {
+  position: relative;
+  z-index: 1;
   display: none;
-  background: rgba(10, 10, 15, 0.98);
+  background: rgba(10, 10, 15, 0.9);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border-top: 1px solid rgba(170, 59, 255, 0.2);
 }
 
@@ -343,6 +393,17 @@ onUnmounted(() => {
 .mobile-nav-link:hover {
   color: var(--accent, #aa3bff);
   padding-left: 24px;
+}
+
+@keyframes navFlow {
+  0%, 100% {
+    background-position: 0% 50%;
+    opacity: 0.64;
+  }
+  50% {
+    background-position: 100% 50%;
+    opacity: 1;
+  }
 }
 
 /* ========================================
@@ -514,6 +575,10 @@ section {
   }
 
   .hero-subtitle {
+    animation: none;
+  }
+
+  .navbar::after {
     animation: none;
   }
 }
