@@ -38,6 +38,7 @@ onMounted(async () => {
         v-for="project in projects"
         :key="project.id"
         class="project-card"
+        :class="{ 'is-unknown': !project.link }"
         :style="{ '--card-accent': project.color }"
       >
         <div class="project-image">
@@ -60,12 +61,19 @@ onMounted(async () => {
             </span>
           </div>
 
-          <a :href="project.link" target="_blank" rel="noopener" class="project-link">
+          <a v-if="project.link" :href="project.link" target="_blank" rel="noopener" class="project-link">
             <span>Visit</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M7 17L17 7M17 7H7M17 7V17"/>
             </svg>
           </a>
+          <span v-else class="project-link pending">
+            <span>Pending</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 6V12L16 14"/>
+              <path d="M21 12A9 9 0 1 1 3 12A9 9 0 0 1 21 12Z"/>
+            </svg>
+          </span>
         </div>
       </div>
     </div>
@@ -103,14 +111,16 @@ onMounted(async () => {
 }
 
 .projects-grid {
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--space-lg, 24px);
 }
 
 .project-card {
+  display: flex;
+  flex-direction: column;
   background: var(--glass-bg, rgba(20, 18, 30, 0.6));
   border: 1px solid var(--border, rgba(170, 59, 255, 0.2));
   border-radius: var(--radius-xl, 20px);
@@ -125,6 +135,34 @@ onMounted(async () => {
   border-color: var(--card-accent, #aa3bff);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
               0 0 30px var(--card-accent, rgba(170, 59, 255, 0.2));
+}
+
+.project-card.is-unknown {
+  border-color: rgba(255, 100, 100, 0.35);
+  background:
+    linear-gradient(135deg, rgba(255, 100, 100, 0.08), transparent 45%),
+    var(--glass-bg, rgba(20, 18, 30, 0.6));
+}
+
+.project-card.is-unknown .project-placeholder {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 100, 100, 0.26), transparent 38%),
+    linear-gradient(135deg, rgba(255, 100, 100, 0.1), rgba(170, 59, 255, 0.16)) !important;
+}
+
+.project-card.is-unknown .project-name-large {
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow:
+    0 0 24px rgba(255, 100, 100, 0.65),
+    0 0 48px rgba(170, 59, 255, 0.35);
+}
+
+.project-card.is-unknown .project-name-large::after {
+  content: '?';
+  display: inline-block;
+  margin-left: 6px;
+  color: var(--card-accent, #ff6464);
+  animation: questionPulse 1.8s ease-in-out infinite;
 }
 
 .project-image {
@@ -166,6 +204,9 @@ onMounted(async () => {
 }
 
 .project-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   padding: var(--space-lg, 24px);
 }
 
@@ -190,6 +231,8 @@ onMounted(async () => {
   flex-wrap: wrap;
   gap: var(--space-xs, 4px);
   margin-bottom: var(--space-md, 16px);
+  flex: 1;
+  align-content: flex-start;
 }
 
 .tech-tag {
@@ -205,7 +248,9 @@ onMounted(async () => {
 .project-link {
   display: inline-flex;
   align-items: center;
+  align-self: flex-start;
   gap: var(--space-sm, 8px);
+  margin-top: auto;
   padding: 10px 20px;
   background: transparent;
   border: 1px solid var(--card-accent, rgba(170, 59, 255, 0.4));
@@ -223,6 +268,37 @@ onMounted(async () => {
   background: var(--card-accent, #aa3bff);
   color: #ffffff;
   box-shadow: 0 0 20px var(--card-accent, rgba(170, 59, 255, 0.4));
+}
+
+.project-link.pending {
+  cursor: default;
+  color: rgba(255, 100, 100, 0.85);
+  border-style: dashed;
+  opacity: 0.9;
+}
+
+.project-link.pending:hover {
+  background: transparent;
+  color: rgba(255, 100, 100, 0.85);
+  box-shadow: none;
+}
+
+@keyframes questionPulse {
+  0%, 100% {
+    opacity: 0.45;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 1280px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 900px;
+  }
 }
 
 @media (max-width: 1024px) {
