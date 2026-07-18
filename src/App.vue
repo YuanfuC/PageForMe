@@ -442,10 +442,15 @@ main,
 .hero-name {
   display: block;
   font-size: clamp(32px, 5vw, 56px);
-  background: linear-gradient(135deg, var(--text-h, #ffffff), var(--accent, #aa3bff));
+  background:
+    linear-gradient(115deg, transparent 24%, rgba(255, 255, 255, 0.92) 34%, #00f0ff 42%, #4f7cff 50%, #8a5cff 58%, transparent 70%),
+    linear-gradient(90deg, var(--text-h, #ffffff), var(--accent-secondary, #00d4ff), #4f7cff, #8a5cff, #00f0ff, var(--text-h, #ffffff));
+  background-size: 320% 100%, 100% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  text-shadow: 0 0 28px rgba(0, 212, 255, 0.2);
+  animation: titleGradientFlow 17s linear infinite;
 }
 
 .hero-subtitle {
@@ -576,6 +581,11 @@ section {
 
   .hero-subtitle {
     animation: none;
+  }
+
+  .hero-name {
+    animation: none;
+    background-position: 50% 50%, 0% 50%;
   }
 
   .navbar::after {

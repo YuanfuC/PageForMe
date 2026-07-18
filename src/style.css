@@ -215,6 +215,13 @@ code {
     transition-duration: 0.01ms !important;
   }
 
+  .section-title,
+  .contact-title,
+  .hero-name {
+    animation: none !important;
+    background-position: 50% 50%, 0% 50%;
+  }
+
   #app::before {
     display: none;
   }
@@ -270,7 +277,15 @@ code {
   font-size: clamp(24px, 4vw, 36px);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0;
+  background:
+    linear-gradient(115deg, transparent 24%, rgba(255, 255, 255, 0.92) 34%, var(--accent-secondary, #00d4ff) 42%, var(--accent, #aa3bff) 50%, var(--accent-pink, #ff0080) 58%, transparent 70%),
+    linear-gradient(90deg, var(--text-h, #ffffff), var(--accent-secondary, #00d4ff), var(--accent, #aa3bff), var(--accent-pink, #ff0080), var(--text-h, #ffffff));
+  background-size: 320% 100%, 100% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: titleGradientFlow 18s linear infinite;
   margin-bottom: var(--space-md, 16px);
 }
 
@@ -278,4 +293,13 @@ code {
   font-size: 16px;
   max-width: 600px;
   margin: 0 auto;
+}
+
+@keyframes titleGradientFlow {
+  0% {
+    background-position: -180% 50%, 0% 50%;
+  }
+  100% {
+    background-position: 220% 50%, 0% 50%;
+  }
 }

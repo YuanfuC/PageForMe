@@ -95,11 +95,16 @@ onMounted(async () => {
   font-size: clamp(24px, 4vw, 36px);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  background: linear-gradient(135deg, var(--accent, #aa3bff), var(--accent-secondary, #00d4ff));
+  letter-spacing: 0;
+  background:
+    linear-gradient(115deg, transparent 24%, rgba(255, 245, 190, 0.94) 34%, var(--accent-gold, #ffd700) 42%, #ff7a00 50%, #ff4d5e 58%, transparent 70%),
+    linear-gradient(90deg, var(--accent-gold, #ffd700), #ff7a00, var(--accent, #aa3bff), var(--accent-secondary, #00d4ff), #ff4d5e, var(--accent-gold, #ffd700));
+  background-size: 320% 100%, 100% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  text-shadow: 0 0 24px rgba(255, 122, 0, 0.16);
+  animation: titleGradientFlow 17.8s linear infinite;
   margin-bottom: var(--space-md, 16px);
 }
 
@@ -181,10 +186,14 @@ onMounted(async () => {
 
 .project-name-large {
   font-family: var(--font-heading, 'Orbitron', sans-serif);
-  font-size: 32px;
+  font-size: clamp(22px, 2vw, 32px);
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0;
+  line-height: 1.18;
+  text-align: center;
+  max-width: calc(100% - 32px);
+  overflow-wrap: anywhere;
   color: var(--text-h, #ffffff);
   text-shadow: 0 0 30px var(--card-accent, rgba(170, 59, 255, 0.5));
 }

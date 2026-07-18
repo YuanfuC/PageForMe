@@ -83,8 +83,16 @@ onMounted(async () => {
   font-size: clamp(24px, 4vw, 36px);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-h, #ffffff);
+  letter-spacing: 0;
+  background:
+    linear-gradient(115deg, transparent 24%, rgba(223, 252, 255, 0.94) 34%, var(--accent-secondary, #00d4ff) 42%, #20f7c5 50%, #47ff88 58%, transparent 70%),
+    linear-gradient(90deg, #dffcff, var(--accent-secondary, #00d4ff), #20f7c5, #47ff88, var(--accent, #aa3bff), #dffcff);
+  background-size: 320% 100%, 100% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 24px rgba(32, 247, 197, 0.16);
+  animation: titleGradientFlow 18.2s linear infinite;
   margin-bottom: var(--space-md, 16px);
 }
 
