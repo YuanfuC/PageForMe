@@ -1,5 +1,27 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+
+interface LiquidPalette {
+  base: string
+  primary: string
+  secondary: string
+  accent: string
+}
+
+const props = defineProps<{
+  palette?: Partial<LiquidPalette>
+  opacity?: number
+}>()
+
+const defaultPalette: LiquidPalette = {
+  base: '#090610',
+  primary: '#6b1ff2',
+  secondary: '#00b8f2',
+  accent: '#f2046b'
+}
+
+const activePalette = computed<LiquidPalette>(() => ({ ...defaultPalette, ...props.palette }))
+const canvasOpacity = computed(() => props.opacity ?? 0.9)
 
 const canvas = ref<HTMLCanvasElement | null>(null)
 
@@ -30,6 +52,10 @@ uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 uniform float u_time;
 uniform float u_intensity;
+uniform vec3 u_base;
+uniform vec3 u_primary;
+uniform vec3 u_secondary;
+uniform vec3 u_accent;
 
 mat2 rotate2d(float angle) {
   float s = sin(angle);
@@ -121,10 +147,10 @@ void main() {
   float particles = clamp(particlesA + particlesB, 0.0, 1.0);
   float particleGlow = smoothstep(0.02, 0.85, particles);
 
-  vec3 base = vec3(0.035, 0.025, 0.06);
-  vec3 purple = vec3(0.42, 0.12, 0.95);
-  vec3 cyan = vec3(0.0, 0.72, 0.95);
-  vec3 pink = vec3(0.95, 0.02, 0.42);
+  vec3 base = u_base;
+  vec3 purple = u_primary;
+  vec3 cyan = u_secondary;
+  vec3 pink = u_accent;
 
   vec3 color = base;
   color += purple * liquid * 0.22;
@@ -203,6 +229,26 @@ const resizeCanvas = () => {
   }
 }
 
+const hexToRgb = (hex: string): [number, number, number] => {
+  const value = hex.replace('#', '')
+  const normalized = value.length === 3
+    ? value.split('').map((char) => char + char).join('')
+    : value
+  const numeric = Number.parseInt(normalized, 16)
+
+  return [
+    ((numeric >> 16) & 255) / 255,
+    ((numeric >> 8) & 255) / 255,
+    (numeric & 255) / 255
+  ]
+}
+
+const setColorUniform = (name: string, color: string) => {
+  if (!gl || !program) return
+  const [red, green, blue] = hexToRgb(color)
+  gl.uniform3f(gl.getUniformLocation(program, name), red, green, blue)
+}
+
 const draw = (time: number) => {
   if (!canvas.value || !gl || !program || !isReady) return
 
@@ -219,6 +265,10 @@ const draw = (time: number) => {
   gl.uniform2f(gl.getUniformLocation(program, 'u_mouse'), smoothPointer.x, smoothPointer.y)
   gl.uniform1f(gl.getUniformLocation(program, 'u_time'), (time - startTime) / 1000)
   gl.uniform1f(gl.getUniformLocation(program, 'u_intensity'), Math.min(baseIntensity + interactionBoost, 1.55))
+  setColorUniform('u_base', activePalette.value.base)
+  setColorUniform('u_primary', activePalette.value.primary)
+  setColorUniform('u_secondary', activePalette.value.secondary)
+  setColorUniform('u_accent', activePalette.value.accent)
   gl.drawArrays(gl.TRIANGLES, 0, 6)
 }
 
@@ -360,6 +410,7 @@ onUnmounted(() => {
   <canvas
     ref="canvas"
     class="liquid-metal-background"
+    :style="{ '--liquid-opacity': canvasOpacity }"
     aria-hidden="true"
   />
 </template>
@@ -373,18 +424,18 @@ onUnmounted(() => {
   height: 100vh;
   pointer-events: none;
   mix-blend-mode: screen;
-  opacity: 0.9;
+  opacity: var(--liquid-opacity);
 }
 
 @media (max-width: 768px) {
   .liquid-metal-background {
-    opacity: 0.72;
+    opacity: calc(var(--liquid-opacity) * 0.8);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .liquid-metal-background {
-    opacity: 0.42;
+    opacity: calc(var(--liquid-opacity) * 0.47);
   }
 }
 </style>

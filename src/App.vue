@@ -177,7 +177,16 @@ onUnmounted(() => {
 
     <!-- Footer -->
     <footer class="footer">
-      <p>{{ site.footer }}</p>
+      <p>
+        <a
+          class="icp-link"
+          href="https://beian.miit.gov.cn/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {{ site.footer }}
+        </a>
+      </p>
       <p class="version">{{ site.version }}</p>
     </footer>
   </div>
@@ -505,6 +514,18 @@ section {
 
 .footer p {
   margin: 12px 0;
+}
+
+.icp-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.icp-link:hover,
+.icp-link:focus-visible {
+  color: var(--accent, #aa3bff);
+  text-shadow: 0 0 12px var(--accent-glow, rgba(170, 59, 255, 0.4));
 }
 
 .version {

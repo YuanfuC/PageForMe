@@ -9,7 +9,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        lobster: resolve(__dirname, 'lobster.html')
+        lobster: resolve(__dirname, 'lobster.html'),
+        lzg: resolve(__dirname, 'lzg.html')
       }
     }
   }
